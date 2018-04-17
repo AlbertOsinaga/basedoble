@@ -1,0 +1,125 @@
+// El nombre de clase contexto algo relacionado al Proyecto
+// Por ejemplo "GranNegocio"
+
+public class GranNegocioContext : DbContext 
+{ 
+    // Mapeo de Entidades (modelo de negocio) a Tablas
+    // Ejemplo Proyecto, Cliente, Recurso
+
+    public DbSet<Proyecto> Proyectos { get; set; }
+    public DbSet<DetalleProyecto> ProyectoDetalles { get; set; }
+    public DbSet<Cliente> Clientes { get; set; }
+    public DbSet<Recurso> Recursos { get; set;}
+    ............................................
+    ............................................
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder) 
+    { 
+        // Mapeo o configuraciones globales van aquí
+        modelBuilder.Ignore<ClaseNoEntidad>();
+        
+        // Una clase no definida como propiedad de clase Context
+        // Forma de compartir varias entidades en una sola tabla 
+        modelBuilder .Entity<MiClase>() .ToTable("MI_CLASE_TABLE");
+
+        // Aplicación y creación de clases de mapeo o configuración va aquí  
+        modelBuilder.ApplyConfiguration(new ProyectoConfiguration());
+
+        base.OnModelCreating(modelBuilder); 
+    } 
+}
+
+public class ProyectoConfiguration : IEntityTypeConfiguration<Proyecto> 
+{ 
+    public void Configure(EntityTypeBuilder<Proyecto> builder) 
+    { 
+        // Comandos de mapeo o configuración para Proyecto
+        
+        // Mapeo de entidad a tabla y schema de la base de datos. 
+        builder .ToTable("TABLA_PROYECTOS", "dbo"); // por defecto "Proyectos" y "dbo"
+        
+        // Propiedad como clave. 
+        builder .HasKey(x => x.CodigoProyecto); // Por defecto "ProyectoId"
+                .UseSqlServerIdentityColumn();  // Estrategia de generación de Identidad para SQL Server
+                .ForSqlServerUseSequenceHiLo(); // Estrategia High - Low para columnas identidad
+
+        // Propiedades como clave compuesta 
+        builder .HasKey(x => new { x.ClaveUno, x.ClaveDos });
+
+        // Ignorando una propiedad de la Entidad. 
+        builder .Ignore(x => x.MiPropiedadNoMapeable);
+
+        // Longitud máxima de una propiedad tipo string. 
+        builder .Property(x => x.Nombre) .HasMaxLength(50);
+
+        // Mapeando valores de una propiedad (column name, type, length, nullability). 
+        builder .Property(x => x.Nombre)    .HasColumnName("NOMBRE")    // Por defecto "Nombre" 
+                                            .HasColumnType("VARCHAR") 
+                                            .HasMaxLength(50) 
+                                            .IsRequired();  // NOT NULL OR BLANK (strings)
+
+        // Mapeando un campo de la clase (público o privado) (no propiedad). 
+        builder .Property<String>("AlgunNombre") .HasField("_algunNombre");
+
+        // Mapeando una relación con bidirectional many-to-one 
+        // y su inversa con delete en cascada.         
+        builder .HasOne(x => x.Cliente) 
+                .WithMany(x => x.Proyectos) 
+                .OnDelete(DeleteBehavior.Cascade);
+
+        // Mapeando una relación bidirectional one-to-one-or-zero con delete en cascada. 
+        builder .HasOptional(x => x.PryectoDetalle) 
+                .WithOne(x => x.Proyecto) 
+                .IsRequired()   // ProyectoDetalle no puede tener Proyecto nulo 
+                .OnDelete(DeleteBehavior.Cascade);    
+
+        // Mapeando una relación bidirectional one-to-one (ambos lados requeridos) 
+        // con delete en cascada. 
+        builder .HasOne(x => x.ProyectoDetalle) 
+                .WithOne(x => x.Proyecto) 
+                .IsRequired() 
+                .OnDelete(DeleteBehavior.Cascade);
+
+        // Mapeando una relación bidirectional one-to-many 
+        // con una propiedad clave foránea (Cliente<Id). 
+        builder .HasOne(x => x.Cliente) 
+                .WithMany(x => x.Proyectos) 
+                .HasForeignKey(x => x.ClienteId);                
+
+        // Mapeando una relación bidirectional one-to-many 
+        // con una columna clave foránea no convencional. 
+        builder .HasOne(x => x.Cliente) 
+                .WithMany(x => x.Proyectos) 
+                .Map(x => x.MapKey("FK_Cliente_Id"));
+
+        // Note: When configuring relationships, you only need to configure one endpoint.               
+    } 
+}
+
+public class ClienteConfiguration : IEntityTypeConfiguration<Cliente> 
+{ 
+    public void Configure(EntityTypeBuilder<Cliente> builder) 
+    {
+        // Mapeando una relación bidirectional one-to-many. 
+        builder .HasMany(x => x.Proyectos) 
+                .WithOne(x => x.Cliente) 
+                .IsRequired();  // Cliente no puede ser nulo para un proyecto
+
+        // Propiedades calculadas
+        // Especificadas como expresiones SQL Server T-SQL
+        builder .Property(x => x.FullName) 
+                .ValueGeneratedNever();     // ValueGeneratedOnAdd o ValueGeneratedOnAddOrUpdate
+
+        // Cuando la base de datos no es SQL Server y no tiene capacidad de crear variables Identidad
+        builder .ValueGeneratedNever();     // En este caso el cliente debe suministrar este campo        
+    
+        // Propiedades con valor por defecto insertada durante CREATE TABLE
+        builder .Property(x => x.FullName) 
+                .ForSqlServerHasDefaultValueSql("SomeFunction()");
+
+        // Querys preaplicados. Ejemplo sofdelete y multi-tenant
+        builder .HasQueryFilter(x => x.IsDeleted == false);         // x.IsDeleted: propiedad de Cliente
+        builder .HasQueryFilter(x => x.TenantId == this.TenantId);  // x.TenanId:  propiedad de Cliente
+                                                                    // this.TenanId: propiedad de Contexto   
+    }
+} 
