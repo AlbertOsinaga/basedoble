@@ -1,0 +1,11 @@
+Conventions
+The current version of Entity Framework Core at the time this book was written (1.1) comes with a number of conventions. Conventions dictate how EF will configure some aspects of your model when they are not explicitly defined.
+The built-in conventions are:
+• All types exposed from a DbSet<T> collection in the DbContext-derived class with public getters are mapped automatically.
+• All classes that appear in DbSet<T> properties on a DbContext-derived class are mapped to a table with the name of the property.
+• All types for which there is no DbSet<T> property will be mapped to tables with the name of the class.
+• All public properties of all mapped types with a getter and a setter are mapped automatically, unless explicitly excluded.
+• All properties of nullable types are not required; those from non-nullable types (value types in .NET) are required.
+• Single primary keys of integer types will use IDENTITY as the generation strategy.
+• Associations to other entities are discovered automatically, and the foreign key columns are built by composing the foreign entity name and its primary key.
+• Child entities are deleted from the database whenever their parent is, if the relation is set to required.

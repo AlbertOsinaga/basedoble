@@ -7,10 +7,14 @@ Entity      Moneda
 Action: A (Add)
         D (Delete)
         E (Exist)
+        F (Find)                * Find por Id
         U (Update)
         I (Insert)
         L (List)
-        G (Get) ...
+        G (Get)                 * Get por Clave única
+        W (Where)               * Get por filtro ordenado por Id
+        WSA (WhereSortA)        * Get por filtro y ordenado ascendentemente
+        WSD (WhereSortD)        * Get por filtro y ordenado descendetemente
 
 CodigoRespuesta:  0-199: Error
                     200: OK
