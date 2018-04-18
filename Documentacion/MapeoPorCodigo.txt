@@ -92,6 +92,14 @@ public class ProyectoConfiguration : IEntityTypeConfiguration<Proyecto>
                 .WithMany(x => x.Proyectos) 
                 .Map(x => x.MapKey("FK_Cliente_Id"));
 
+        // Campo para control de concurrencia - Otras DB
+        builder .Property(x => x.TimeStamp) 
+                .IsConcurrencyToken();
+
+        // Campo para control de concurrencia - SQL Server
+        builder .Property(x => x.RowVersion) 
+                .IsRowVersion();
+        
         // Note: When configuring relationships, you only need to configure one endpoint.               
     } 
 }

@@ -1,0 +1,8 @@
+A LINQ to Entities query is built from the entity collection properties of the DbSet<T> type 
+exposed by the context, and it consists of an IQueryable<T> implementation.
+
+Execution of LINQ queries is deferred until GetEnumerator is invoked, 
+which occurs in a foreach loop
+or when a terminal operator such as ToList, ToArray, ToDictionary, 
+Any, Count, LongCount, Single, SingleOrDefault, First, FirstOrDefault, Last, or LastOrDefault is used. 
+You can pick up this query and start adding restrictions such as paging or sorting.
