@@ -1,9 +1,17 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "base2.Modelo", "base2.Modelo\base2.Modelo.csproj", "{B154755E-FA7D-45DB-A44C-E80E797075B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B154755E-FA7D-45DB-A44C-E80E797075B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B154755E-FA7D-45DB-A44C-E80E797075B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B154755E-FA7D-45DB-A44C-E80E797075B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B154755E-FA7D-45DB-A44C-E80E797075B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
