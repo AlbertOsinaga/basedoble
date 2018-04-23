@@ -16,7 +16,8 @@ namespace base2.Modelo
         ///             y los asigna a las propiedades correspondientes de la entidad. 
         /// </summary>
         /// <param name="jentity">Incluye las propiedades de la entidad (formato Json), 
-        ///                         las propiedades omitidas se asignan con valores default.</param>
+        ///                         las propiedades omitidas indican que las propiedades correspondientes del objeto entidad
+        ///                         se debenr reaasignar con valores default.</param>
         public abstract void FromJson(string jentity);              
 
         /// <summary>
@@ -24,8 +25,9 @@ namespace base2.Modelo
         ///             y los asigna a las propiedades correspondientes de la entidad. 
         /// </summary>
         /// <param name="jentity">Incluye las propiedades de la entidad (formato Json), 
-        ///                         las propiedades omitidas se ignoran y no modifican las del objeto entidad.</param>
-        public abstract void ParseJson(string jentity);             // Fields en jentity se asignan, los otros se ignoran  
+        ///                         las propiedades omitidas se ignoran y no se modifican las propiedades correspondientes 
+        ///                         del objeto entidad.</param>
+        public abstract void ParseJson(string jentity);  
 
         /// <summary>
         /// ToJson. Toma los valores de propiedades del objeto entidad 
@@ -35,28 +37,37 @@ namespace base2.Modelo
         /// <param name="jfields">Campos a incluir en el resultado, 
         ///                       campo "Id" se incluye por defecto,
         ///                       jfield = null => se incluyen todos los campos.</param>
-        public abstract string ToJson(string jfields = null);       // Con Id , Incluye fields en jfields (null incluye todos)
+        public abstract string ToJson(string jfields = null);
 
         /// <summary>
-        /// ToJsonNoid.
+        /// ToJsonNoid.  Toma los valores de propiedades del objeto entidad 
+        ///             y los devuelve en un string en formato Json.
         /// </summary>
-        /// <returns>The json noid.</returns>
-        /// <param name="jfields">Jfields.</param>
-        public abstract string ToJsonNoid(string jfields = null);   // No Id , Incluye fields en jfields (null incluye todos) 
+        /// <returns>String con los valores de las propiedades en formato Json.</returns>
+        /// <param name="jfields">Campos a incluir en el resultado, 
+        ///                       campo "Id" no se incluye por defecto,
+        ///                       jfield = null => se incluyen todos los campos.</param>
+        public abstract string ToJsonNoid(string jfields = null);
 
         /// <summary>
-        /// ToJsonX.
+        /// ToJsonX. Toma los valores de propiedades del objeto entidad 
+        ///             y los devuelve en un string en formato Json.
         /// </summary>
-        /// <returns>The json x.</returns>
-        /// <param name="jfields">Jfields.</param>
-        public abstract string ToJsonX(string jfields = null);      // Con Id , eXcluye fields en jfields (null no excluye nada)
+        /// <returns>String con los valores de las propiedades en formato Json.</returns>
+        /// <param name="jfields">Campos a excluir en el resultado, 
+        ///                       campo "Id" se incluye por defecto,
+        ///                       jfield = null => se incluyen todos los campos.</param>
+        public abstract string ToJsonX(string jfields = null);
 
         /// <summary>
-        /// ToJsonXnoid.
+        /// ToJsonXnoid.  Toma los valores de propiedades del objeto entidad 
+        ///             y los devuelve en un string en formato Json.
         /// </summary>
-        /// <returns>The json xnoid.</returns>
-        /// <param name="jfields">Jfields.</param>
-        public abstract string ToJsonXnoid(string jfields = null);  // No Id , eXclude fields en jfields (null no excluye nada)
+        /// <returns>String con los valores de las propiedades en formato Json.</returns>
+        /// <param name="jfields">Campos a excluir en el resultado, 
+        ///                       campo "Id" no se incluye por defecto,
+        ///                       jfield = null => se incluyen todos los campos.</param>
+        public abstract string ToJsonXnoid(string jfields = null);
 
         /// <summary>
         /// ToArrayOfJsonEntities.
