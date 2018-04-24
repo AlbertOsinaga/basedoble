@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
+using Microsoft.CSharp;
 using Newtonsoft.Json;
 
-namespace ModeloTransacciones
+namespace base2.Modelo
 {
+    /// <summary>
+    /// Moneda. Clase Entidad, ejemplifica una clase POCO, derivada de Entity, del modelo EF Core "base2".
+    ///                         Representa una entidad "Moneda" para manejo de monedas en una solución
+    ///                         de tipo "Contable".
+    /// </summary>
     public partial class Moneda : Entity
     {
         public int MonedaId { get; set; }
@@ -23,68 +29,12 @@ namespace ModeloTransacciones
             FromString(jmoneda);
         }
 
-        //
-        // Json
-        //
-
         public override void FromJson(string jentity)
         {
             FromString(jentity);
         }
 
         public override void ParseJson(string jentity)
-        {
-            ParseString(jentity);
-        }
-
-        public override string ToJson(string jfields = null)
-        {
-            return ToString(jfields);
-        }
-
-        public override string ToJsonNoid(string jfields = null)
-        {
-            return ToStringNoid(jfields);
-        }
-
-        public override string ToJsonX(string jfields = null)
-        {
-            return ToStringX(jfields);
-        }
-
-        public override string ToJsonXnoid(string jfields = null)
-        {
-            return ToStringXnoid(jfields);
-        }
-
-        public static Moneda[] FromJsonArray(string jentities)
-        {
-            string[] strEntities = Entity.JsonToArray(jentities);
-            List<Moneda> monedas = new List<Moneda>();
-            foreach (var se in strEntities)
-            {
-                Moneda moneda = new Moneda(se);
-                monedas.Add(moneda);
-            }
-
-            return monedas.ToArray();
-        }
-
-        //
-        // String
-        //
-
-        public void FromString(string jentity)
-        {
-            Moneda moneda = JsonConvert.DeserializeObject<Moneda>(jentity);
-            this.MonedaId = moneda.MonedaId;
-            this.Simbolo = moneda.Simbolo;
-            this.Nombre = moneda.Nombre;
-            this.Tipo = moneda.Tipo;
-            this.TasaCambio = moneda.TasaCambio;
-        }
-
-        public void ParseString(string jentity)
         {
             dynamic dynMoneda = JsonConvert.DeserializeObject(jentity);
             if (dynMoneda.MonedaId is object)
@@ -99,13 +49,37 @@ namespace ModeloTransacciones
                 this.TasaCambio = dynMoneda.TasaCambio;
         }
 
-        public override string ToString()
+        public override string ToJson(string jfields = null)
         {
-            return ToString(null);
+            return ToString(jfields, noid: false);
         }
 
+        public override string ToJsonNoid(string jfields = null)
+        {
+            return ToString(jfields, noid: true);
+        }
 
-        public string ToString(string jfields, bool noid = false)
+        public override string ToJsonX(string jfields = null)
+        {
+            return ToStringX(jfields, noid: false);
+        }
+
+        public override string ToJsonXnoid(string jfields = null)
+        {
+            return ToStringX(jfields, noid: true);
+        }
+
+        public void FromString(string jentity)
+        {
+            Moneda moneda = JsonConvert.DeserializeObject<Moneda>(jentity);
+            this.MonedaId = moneda.MonedaId;
+            this.Simbolo = moneda.Simbolo;
+            this.Nombre = moneda.Nombre;
+            this.Tipo = moneda.Tipo;
+            this.TasaCambio = moneda.TasaCambio;
+        }
+
+        public string ToString(string jfields = null, bool noid = false)
         {
             if (jfields == null)
             {
@@ -157,12 +131,7 @@ namespace ModeloTransacciones
             return JsonConvert.SerializeObject(dynMoneda);
         }
 
-        public string ToStringNoid(string jfields)
-        {
-            return ToString(jfields, noid:true);
-        }
-
-        public string ToStringX(string jfields, bool noid = false)
+        public string ToStringX(string jfields = null, bool noid = false)
         {
             if (jfields == null)
             {
@@ -229,9 +198,17 @@ namespace ModeloTransacciones
             return JsonConvert.SerializeObject(dynMoneda);
         }
 
-        public string ToStringXnoid(string jfields)
+        public static Moneda[] ToArray(string jentities)
         {
-            return ToStringX(jfields, noid:true);
+            string[] strEntities = Entity.ToArrayOfJsonEntities(jentities);
+            List<Moneda> monedas = new List<Moneda>();
+            foreach (var se in strEntities)
+            {
+                Moneda moneda = new Moneda(se);
+                monedas.Add(moneda);
+            }
+
+            return monedas.ToArray();
         }
     }
 }
