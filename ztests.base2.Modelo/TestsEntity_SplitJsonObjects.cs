@@ -84,5 +84,99 @@ namespace ztests.base2.Modelo
             Assert.Equal(jobjeto2, objetos[1]);
             Assert.Equal(jobjeto3, objetos[2]);
         }
+
+        [Fact]
+        public void TestSplitJsonObjects_OK04()
+        {
+            // Prepara (Json array vacío)
+            string jobjetos = "[]";
+
+            // Ejecuta
+            string[] objetos = Entity.SplitJsonObjects(jobjetos);
+
+            // Comprueba
+            Assert.Empty(objetos);
+        }
+
+        [Fact]
+        public void TestSplitJsonObjects_OK05()
+        {
+            // Prepara (Json array = objeto vacío)
+            string jobjetos = "{}";
+
+            // Ejecuta
+            string[] objetos = Entity.SplitJsonObjects(jobjetos);
+
+            // Comprueba
+            Assert.Equal("{}", objetos[0]);
+        }
+
+        [Fact]
+        public void TestSplitJsonObjects_ZBad01()
+        {
+            // Prepara (null Json array)
+            string jobjetos = null;
+
+            // Ejecuta
+            try
+            {
+                Assert.Throws<NullReferenceException>(() => Entity.SplitJsonObjects(jobjetos));
+            }
+            catch (Exception ex)
+            {
+                Assert.Equal("(No exception was thrown)", ex.Message);
+            }
+        }
+
+        [Fact]
+        public void TestSplitJsonObjects_ZBad02()
+        {
+            // Prepara (empty Json array)
+            string jobjetos = "";
+
+            // Ejecuta
+            try
+            {
+                Assert.Throws<NullReferenceException>(() => Entity.SplitJsonObjects(jobjetos));
+            }
+            catch (Exception ex)
+            {
+                Assert.Equal("(No exception was thrown)", ex.Message);
+            }
+        }
+
+        [Fact]
+        public void TestSplitJsonObjects_ZBad03()
+        {
+            // Prepara (espacio Json array)
+            string jobjetos = " ";
+
+            // Ejecuta
+            try
+            {
+                Assert.Throws<NullReferenceException>(() => Entity.SplitJsonObjects(jobjetos));
+            }
+            catch (Exception ex)
+            {
+                Assert.Equal("(No exception was thrown)", ex.Message);
+            }
+        }
+
+        [Fact]
+        public void TestSplitJsonObjects_ZBad04()
+        {
+            // Prepara (Json array basura)
+            string jobjetos = "abc";
+
+            // Ejecuta
+            try
+            {
+                Assert.Throws<ApplicationException>(() => Entity.SplitJsonObjects(jobjetos));
+            }
+            catch (Exception ex)
+            {
+                Assert.Equal("(No exception was thrown)", ex.Message);
+            }
+        }
     }
 }

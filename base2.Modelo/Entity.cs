@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Dynamic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
@@ -77,32 +77,42 @@ namespace base2.Modelo
         /// <param name="jobjects">Array o colección de objects en formato Json.</param>
         public static string[] SplitJsonObjects(string jobjects)
         {
-            List<string> strObjects = new List<string>();
-            StringReader sr = new StringReader(jobjects);
-            JsonTextReader jReader = new JsonTextReader(sr);
-            string jobject = string.Empty;
-            int indexStart = -1;
-            int indexEnd = -1;
-            while(jReader.Read())
-            {
-                if(jReader.TokenType == JsonToken.StartObject)
-                {
-                    indexStart = jReader.LinePosition - 1;
-                }
-                else if (jReader.TokenType == JsonToken.EndObject)
-                {
-                    indexEnd = jReader.LinePosition;
-                    jobject = jobjects.Substring(indexStart, indexEnd - indexStart);
-                    strObjects.Add(jobject);
-                    indexStart = -1;
-                    indexEnd = -1;
-                    jobject = string.Empty;
-                }
-            }
-            jReader.Close();
-            sr.Close();
+            if (string.IsNullOrWhiteSpace(jobjects))
+                throw new NullReferenceException("Argumento nulo al llamar a Entity.SplitJsonObjects.");
 
-            return strObjects.ToArray();
+            try
+            {
+                List<string> strObjects = new List<string>();
+                StringReader sr = new StringReader(jobjects);
+                JsonTextReader jReader = new JsonTextReader(sr);
+                string jobject = string.Empty;
+                int indexStart = -1;
+                int indexEnd = -1;
+                while (jReader.Read())
+                {
+                    if (jReader.TokenType == JsonToken.StartObject)
+                    {
+                        indexStart = jReader.LinePosition - 1;
+                    }
+                    else if (jReader.TokenType == JsonToken.EndObject)
+                    {
+                        indexEnd = jReader.LinePosition;
+                        jobject = jobjects.Substring(indexStart, indexEnd - indexStart);
+                        strObjects.Add(jobject);
+                        indexStart = -1;
+                        indexEnd = -1;
+                        jobject = string.Empty;
+                    }
+                }
+                jReader.Close();
+                sr.Close();
+
+                return strObjects.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error en Entity.SplitJsonObjects.", ex);
+            }
         }
 
         /// <summary>
