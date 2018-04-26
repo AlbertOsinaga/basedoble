@@ -160,69 +160,80 @@ namespace base2.Modelo
 
         public string ToStringX(string jfields = null, bool noid = false)
         {
-            if (jfields == null)
+            try
             {
-                if (noid == false)
+                if (string.IsNullOrWhiteSpace(jfields))
                 {
-                    return JsonConvert.SerializeObject(this);
-                }
-                else
-                {
-                    return ToStringX("[\"Id\"]");
-                }
-            }
-
-            StringReader sreader = new StringReader(jfields);
-            JsonTextReader jreader = new JsonTextReader(sreader);
-
-            dynamic fieldsMoneda = new ExpandoObject();
-            fieldsMoneda.MonedaId = !noid;
-            fieldsMoneda.Simbolo = true;
-            fieldsMoneda.Nombre = true;
-            fieldsMoneda.Tipo = true;
-            fieldsMoneda.TasaCambio = true;
-            while (jreader.Read())
-            {
-                if (jreader.TokenType == JsonToken.String)
-                {
-                    string field = jreader.Value as String;
-                    switch (field.Trim().ToLower())
+                    if (noid == false)
                     {
-                        case "id":
-                        case "monedaid":
-                            fieldsMoneda.MonedaId = false;
-                            break;
-                        case "simbolo":
-                            fieldsMoneda.Simbolo = false;
-                            break;
-                        case "nombre":
-                            fieldsMoneda.Nombre = false;
-                            break;
-                        case "tipo":
-                            fieldsMoneda.Tipo = false;
-                            break;
-                        case "tasacambio":
-                            fieldsMoneda.TasaCambio = false;
-                            break;
-                        default:
-                            break;
+                        return JsonConvert.SerializeObject(this);
+                    }
+                    else
+                    {
+                        return ToStringX("[\"Id\"]");
                     }
                 }
-            }
 
-            dynamic dynMoneda = new ExpandoObject();
-            if (fieldsMoneda.MonedaId)
-                dynMoneda.MonedaId = MonedaId;
-            if (fieldsMoneda.Simbolo)
-                dynMoneda.Simbolo = Simbolo;
-            if (fieldsMoneda.Nombre)
-                dynMoneda.Nombre = Nombre;
-            if (fieldsMoneda.Tipo)
-                dynMoneda.Tipo = Tipo;
-            if (fieldsMoneda.TasaCambio)
-                dynMoneda.TasaCambio = TasaCambio;
-            
-            return JsonConvert.SerializeObject(dynMoneda);
+                StringReader sreader = new StringReader(jfields);
+                JsonTextReader jreader = new JsonTextReader(sreader);
+
+                dynamic fieldsMoneda = new ExpandoObject();
+                fieldsMoneda.MonedaId = !noid;
+                fieldsMoneda.Simbolo = true;
+                fieldsMoneda.Nombre = true;
+                fieldsMoneda.Tipo = true;
+                fieldsMoneda.TasaCambio = true;
+                while (jreader.Read())
+                {
+                    if (jreader.TokenType == JsonToken.String)
+                    {
+                        string field = jreader.Value as String;
+                        switch (field.Trim().ToLower())
+                        {
+                            case "id":
+                            case "monedaid":
+                                fieldsMoneda.MonedaId = false;
+                                break;
+                            case "simbolo":
+                                fieldsMoneda.Simbolo = false;
+                                break;
+                            case "nombre":
+                                fieldsMoneda.Nombre = false;
+                                break;
+                            case "tipo":
+                                fieldsMoneda.Tipo = false;
+                                break;
+                            case "tasacambio":
+                                fieldsMoneda.TasaCambio = false;
+                                break;
+                            default:
+                                throw new ArgumentException($"Error en jfields, '{field}' no existe en entidad");
+                        }
+                    }
+                }
+
+                dynamic dynMoneda = new ExpandoObject();
+                if (fieldsMoneda.MonedaId)
+                    dynMoneda.MonedaId = MonedaId;
+                if (fieldsMoneda.Simbolo)
+                    dynMoneda.Simbolo = Simbolo;
+                if (fieldsMoneda.Nombre)
+                    dynMoneda.Nombre = Nombre;
+                if (fieldsMoneda.Tipo)
+                    dynMoneda.Tipo = Tipo;
+                if (fieldsMoneda.TasaCambio)
+                    dynMoneda.TasaCambio = TasaCambio;
+
+                return JsonConvert.SerializeObject(dynMoneda);
+            }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw (new ApplicationException("Error en 'JsonConvert.SerializeObject'", ex));
+            }
         }
 
         public static Moneda[] ToArray(string jentities)

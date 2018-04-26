@@ -5,10 +5,10 @@ using base2.Modelo;
 
 namespace ztests.base2.Modelo
 {
-    public class TestsEntity_ToJson
+    public class TestsEntity_ToJsonX
     {
         [Fact]
-        public void TestToJson_OK01()
+        public void TestToJsonX_OK01()
         {
             // Prepara (string json fields nulo)
             string jfields = null;
@@ -24,14 +24,14 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":\"X\",\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);    // idem moneda.ToJson()
+            string jmoneda = moneda.ToJsonX(jfields);   // idem. moneda.ToJsonX()
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK02()
+        public void TestToJsonX_OK02()
         {
             // Prepara (string json fields empty)
             string jfields = "";
@@ -47,14 +47,14 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":\"X\",\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);
+            string jmoneda = moneda.ToJsonX(jfields);
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK03()
+        public void TestToJsonX_OK03()
         {
             // Prepara (string json fields nulo, campos en otro orden)
             string jfields = null;
@@ -70,14 +70,14 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":\"X\",\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);    // idem moneda.ToJson()
+            string jmoneda = moneda.ToJsonX(jfields);   // idem moneda.ToJson()
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
         [Fact]
 
-        public void TestToJson_OK04()
+        public void TestToJsonX_OK04()
         {
             // Prepara (string json fields nulo, numericos por defecto)
             string jfields = null;
@@ -91,14 +91,14 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":\"X\",\"TasaCambio\":0.0}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);    // idem moneda.ToJson()
+            string jmoneda = moneda.ToJsonX(jfields);   // idem moneda.ToJsonX()
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK05()
+        public void TestToJsonX_OK05()
         {
             // Prepara (string json fields nulo, strings por defecto)
             string jfields = null;
@@ -111,16 +111,16 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":null,\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);    // idem moneda.ToJson()
+            string jmoneda = moneda.ToJsonX(jfields);   // idem moneda.ToJsonX()
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK06()
+        public void TestToJsonX_OK06()
         {
-            // Prepara (jfields Id y algunos)
+            // Prepara (jfields excluir algunos)
             string jfields = "[\"MonedaId\",\"Nombre\",\"TasaCambio\"]";
             Moneda moneda = new Moneda
             {
@@ -130,20 +130,19 @@ namespace ztests.base2.Modelo
                 Tipo = "X",
                 TasaCambio = 3.4783M
             };
-            string jmonedaEsperada = "{\"MonedaId\":1,\"Nombre\":\"Moneda Unica\"," +
-                                        "\"TasaCambio\":3.4783}";
+            string jmonedaEsperada = "{\"Simbolo\":\"MUN\",\"Tipo\":\"X\"}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);
+            string jmoneda = moneda.ToJsonX(jfields);
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK07()
+        public void TestToJsonX_OK07()
         {
-            // Prepara (jfields no Id y algunos)
+            // Prepara (jfields excluir algunos, no Id)
             string jfields = "[\"Nombre\",\"TasaCambio\"]";
             Moneda moneda = new Moneda
             {
@@ -153,20 +152,20 @@ namespace ztests.base2.Modelo
                 Tipo = "X",
                 TasaCambio = 3.4783M
             };
-            string jmonedaEsperada = "{\"MonedaId\":1,\"Nombre\":\"Moneda Unica\"," +
-                                        "\"TasaCambio\":3.4783}";
+            string jmonedaEsperada = "{\"MonedaId\":1,\"Simbolo\":\"MUN\"," +
+                                        "\"Tipo\":\"X\"}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);
+            string jmoneda = moneda.ToJsonX(jfields);
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK08()
+        public void TestToJsonX_OK08()
         {
-            // Prepara (jfields solo Id)
+            // Prepara (jfields solo excluye Id)
             string jfields = "[\"MonedaId\"]";
             Moneda moneda = new Moneda
             {
@@ -176,19 +175,20 @@ namespace ztests.base2.Modelo
                 Tipo = "X",
                 TasaCambio = 3.4783M
             };
-            string jmonedaEsperada = "{\"MonedaId\":1}";
+            string jmonedaEsperada = "{\"Simbolo\":\"MUN\",\"Nombre\":\"Moneda Unica\"," +
+                                        "\"Tipo\":\"X\",\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);
+            string jmoneda = moneda.ToJsonX(jfields);
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK09()
+        public void TestToJsonX_OK09()
         {
-            // Prepara (string json fields con objeto vacio)
+            // Prepara (string json fields con objeto vacio, no excluye nada)
             string jfields = "{}";
             Moneda moneda = new Moneda
             {
@@ -198,17 +198,18 @@ namespace ztests.base2.Modelo
                 Tipo = "X",
                 TasaCambio = 3.4783M
             };
-            string jmonedaEsperada = "{\"MonedaId\":1}";
+            string jmonedaEsperada = "{\"MonedaId\":1,\"Simbolo\":\"MUN\",\"Nombre\":\"Moneda Unica\"," +
+                                        "\"Tipo\":\"X\",\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);
+            string jmoneda = moneda.ToJsonX(jfields);
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK10()
+        public void TestToJsonX_OK10()
         {
             // Prepara (string json fields con array vacio)
             string jfields = "[]";
@@ -220,17 +221,18 @@ namespace ztests.base2.Modelo
                 Tipo = "X",
                 TasaCambio = 3.4783M
             };
-            string jmonedaEsperada = "{\"MonedaId\":1}";
+            string jmonedaEsperada = "{\"MonedaId\":1,\"Simbolo\":\"MUN\",\"Nombre\":\"Moneda Unica\"," +
+                                        "\"Tipo\":\"X\",\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);
+            string jmoneda = moneda.ToJsonX(jfields);
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_OK11()
+        public void TestToJsonX_OK11()
         {
             // Prepara (jfields Id y algunos con case mixed)
             string jfields = "[\"moNedaid\",\"nombre\",\"tasaCaMbio\"]";
@@ -242,18 +244,18 @@ namespace ztests.base2.Modelo
                 Tipo = "X",
                 TasaCambio = 3.4783M
             };
-            string jmonedaEsperada = "{\"MonedaId\":1,\"Nombre\":\"Moneda Unica\"," +
-                                        "\"TasaCambio\":3.4783}";
+            string jmonedaEsperada = "{\"Simbolo\":\"MUN\"," +
+                                        "\"Tipo\":\"X\"}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJson(jfields);
+            string jmoneda = moneda.ToJsonX(jfields);
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
         }
 
         [Fact]
-        public void TestToJson_ZBad01()
+        public void TestToJsonX_ZBad01()
         {
             // Prepara (string json fields basura)
             string jfields = "abc";
@@ -269,7 +271,7 @@ namespace ztests.base2.Modelo
             // Ejecuta
             try
             {
-                Assert.Throws<ApplicationException>(() => { moneda.ToJson(jfields); });
+                Assert.Throws<ApplicationException>(() => { moneda.ToJsonX(jfields); });
             }
             catch (Exception ex)
             {
@@ -278,7 +280,7 @@ namespace ztests.base2.Modelo
         }
 
         [Fact]
-        public void TestToJson_ZBad02()
+        public void TestToJsonX_ZBad02()
         {
             // Prepara (string json fields con error de formato)
             string jfields = "{\"Nombre\",\"TasaCambio\"}";
@@ -294,7 +296,7 @@ namespace ztests.base2.Modelo
             // Ejecuta
             try
             {
-                Assert.Throws<ApplicationException>(() => { moneda.ToJson(jfields); });
+                Assert.Throws<ApplicationException>(() => { moneda.ToJsonX(jfields); });
             }
             catch (Exception ex)
             {
@@ -303,7 +305,7 @@ namespace ztests.base2.Modelo
         }
 
         [Fact]
-        public void TestToJson_ZBad03()
+        public void TestToJsonX_ZBad03()
         {
             // Prepara (jfields no Id y algunos, y otros que no existen)
             string jfields = "[\"Nombre\",\"TasaCambio\",\"NoExiste\"]";
@@ -319,7 +321,7 @@ namespace ztests.base2.Modelo
             // Ejecuta
             try
             {
-                Assert.Throws<ArgumentException>(() => { moneda.ToJson(jfields); });
+                Assert.Throws<ArgumentException>(() => { moneda.ToJsonX(jfields); });
             }
             catch (Exception ex)
             {

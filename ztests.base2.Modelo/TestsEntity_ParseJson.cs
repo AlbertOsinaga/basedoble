@@ -112,7 +112,7 @@ namespace ztests.base2.Modelo
             // Ejecuta
             try
             {
-                Assert.Throws<ApplicationException>(() => { moneda.ParseJson(jmoneda); });
+                Assert.Throws<ApplicationException>(() => { moneda.ParseJson(jmoneda); });  // idem moneda.ParseJson()
             }
             catch (Exception ex)
             {

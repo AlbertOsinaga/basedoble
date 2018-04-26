@@ -24,7 +24,7 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":\"X\",\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJsonNoid(jfields);
+            string jmoneda = moneda.ToJsonNoid(jfields);    // idem moneda.ToJsonNoid()
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
@@ -71,7 +71,7 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":\"X\",\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJsonNoid(jfields);
+            string jmoneda = moneda.ToJsonNoid(jfields);    // idem moneda.ToJsonNoid()
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
@@ -92,7 +92,7 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":\"X\",\"TasaCambio\":0.0}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJsonNoid(jfields);
+            string jmoneda = moneda.ToJsonNoid(jfields);    // idem moneda.ToJsonNoid()
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
@@ -112,7 +112,7 @@ namespace ztests.base2.Modelo
                                         "\"Tipo\":null,\"TasaCambio\":3.4783}";
 
             // Ejecuta
-            string jmoneda = moneda.ToJsonNoid(jfields);
+            string jmoneda = moneda.ToJsonNoid(jfields);    // idem moneda.ToJsonNoid()
 
             // Comprueba
             Assert.Equal(jmonedaEsperada, jmoneda);
