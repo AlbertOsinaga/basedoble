@@ -8,23 +8,22 @@ using Newtonsoft.Json;
 namespace base2.Modelo
 {
     /// <summary>
-    /// Moneda. Clase Entidad, ejemplifica una clase POCO, derivada de Entity, del modelo EF Core "base2".
-    ///                         Representa una entidad "Moneda" para manejo de monedas en una solución
+    /// Cliente. Clase Entidad, ejemplifica una clase POCO, derivada de Entity, del modelo EF Core "base2".
+    ///                         Representa una entidad "Cliente" para manejo de clientes en una solución
     ///                         de tipo "Contable".
     /// </summary>
-    public partial class Moneda : Entity
+    public partial class Cliente : Entity
     {
-        public int MonedaId { get; set; }
-        public string Simbolo { get; set; }
+        public int ClienteId { get; set; }
         public string Nombre { get; set; }
-        public string Tipo { get; set; }            // B-Base X-Ext
-        public decimal TasaCambio { get; set; }
-	}
+        public string Telefono { get; set; }
+        public decimal Saldo { get; set; }
+    }
 
-    public partial class Moneda
+    public partial class Cliente
     {
-        public Moneda() {}
-        public Moneda(string jentity) : this()
+        public Cliente() { }
+        public Cliente(string jentity) : this()
         {
             FromString(jentity);
         }
@@ -36,20 +35,18 @@ namespace base2.Modelo
 
         public override void ParseJson(string jentity)
         {
-            dynamic dynMoneda = null;
+            dynamic dynCliente = null;
             try
             {
-                dynMoneda = JsonConvert.DeserializeObject(jentity);
-                if (dynMoneda.MonedaId is object)
-                    this.MonedaId = dynMoneda.MonedaId;
-                if (dynMoneda.Simbolo is object)
-                    this.Simbolo = dynMoneda.Simbolo;
-                if (dynMoneda.Nombre is object)
-                    this.Nombre = dynMoneda.Nombre;
-                if (dynMoneda.Tipo is object)
-                    this.Tipo = dynMoneda.Tipo;
-                if (dynMoneda.TasaCambio is object)
-                    this.TasaCambio = dynMoneda.TasaCambio;
+                dynCliente = JsonConvert.DeserializeObject(jentity);
+                if (dynCliente.ClienteId is object)
+                    this.ClienteId = dynCliente.ClienteId;
+                if (dynCliente.Nombre is object)
+                    this.Nombre = dynCliente.Nombre;
+                if (dynCliente.Telefono is object)
+                    this.Telefono = dynCliente.Telefono;
+                if (dynCliente.Saldo is object)
+                    this.Saldo = dynCliente.Saldo;
             }
             catch (Exception ex)
             {
@@ -79,15 +76,14 @@ namespace base2.Modelo
 
         public void FromString(string jentity)
         {
-            Moneda entity = null;
+            Cliente entity = null;
             try
             {
-                entity = JsonConvert.DeserializeObject<Moneda>(jentity);
-                this.MonedaId = entity.MonedaId;
-                this.Simbolo = entity.Simbolo;
+                entity = JsonConvert.DeserializeObject<Cliente>(jentity);
+                this.ClienteId = entity.ClienteId;
                 this.Nombre = entity.Nombre;
-                this.Tipo = entity.Tipo;
-                this.TasaCambio = entity.TasaCambio;
+                this.Telefono = entity.Telefono;
+                this.Saldo = entity.Saldo;
             }
             catch (Exception ex)
             {
@@ -116,7 +112,7 @@ namespace base2.Modelo
 
                 dynamic dynEntity = new ExpandoObject();
                 if (noid == false)
-                    dynEntity.MonedaId = MonedaId;
+                    dynEntity.ClienteId = ClienteId;
                 while (jreader.Read())
                 {
                     if (jreader.TokenType == JsonToken.String)
@@ -125,21 +121,18 @@ namespace base2.Modelo
                         switch (field.Trim().ToLower())
                         {
                             case "id":
-                            case "monedaid":
+                            case "clienteid":
                                 if (noid == true)
-                                    dynEntity.MonedaId = MonedaId;
-                                break;
-                            case "simbolo":
-                                dynEntity.Simbolo = Simbolo;
+                                    dynEntity.ClienteId = ClienteId;
                                 break;
                             case "nombre":
                                 dynEntity.Nombre = Nombre;
                                 break;
-                            case "tipo":
-                                dynEntity.Tipo = Tipo;
+                            case "telefono":
+                                dynEntity.Telefono = Telefono;
                                 break;
-                            case "tasacambio":
-                                dynEntity.TasaCambio = TasaCambio;
+                            case "saldo":
+                                dynEntity.Saldo = Saldo;
                                 break;
                             default:
                                 throw new ArgumentException($"Error en jfields, '{field}' no existe en entidad");
@@ -178,11 +171,10 @@ namespace base2.Modelo
                 JsonTextReader jreader = new JsonTextReader(sreader);
 
                 dynamic fieldsEntity = new ExpandoObject();
-                fieldsEntity.MonedaId = !noid;
-                fieldsEntity.Simbolo = true;
+                fieldsEntity.ClienteId = !noid;
                 fieldsEntity.Nombre = true;
-                fieldsEntity.Tipo = true;
-                fieldsEntity.TasaCambio = true;
+                fieldsEntity.Telefono = true;
+                fieldsEntity.Saldo = true;
                 while (jreader.Read())
                 {
                     if (jreader.TokenType == JsonToken.String)
@@ -191,20 +183,17 @@ namespace base2.Modelo
                         switch (field.Trim().ToLower())
                         {
                             case "id":
-                            case "monedaid":
-                                fieldsEntity.MonedaId = false;
-                                break;
-                            case "simbolo":
-                                fieldsEntity.Simbolo = false;
+                            case "clienteid":
+                                fieldsEntity.ClienteId = false;
                                 break;
                             case "nombre":
                                 fieldsEntity.Nombre = false;
                                 break;
-                            case "tipo":
-                                fieldsEntity.Tipo = false;
+                            case "telefono":
+                                fieldsEntity.Telefono = false;
                                 break;
-                            case "tasacambio":
-                                fieldsEntity.TasaCambio = false;
+                            case "saldo":
+                                fieldsEntity.Saldo = false;
                                 break;
                             default:
                                 throw new ArgumentException($"Error en jfields, '{field}' no existe en entidad");
@@ -213,16 +202,14 @@ namespace base2.Modelo
                 }
 
                 dynamic dynEntity = new ExpandoObject();
-                if (fieldsEntity.MonedaId)
-                    dynEntity.MonedaId = MonedaId;
-                if (fieldsEntity.Simbolo)
-                    dynEntity.Simbolo = Simbolo;
+                if (fieldsEntity.ClienteId)
+                    dynEntity.ClienteId = ClienteId;
                 if (fieldsEntity.Nombre)
                     dynEntity.Nombre = Nombre;
-                if (fieldsEntity.Tipo)
-                    dynEntity.Tipo = Tipo;
-                if (fieldsEntity.TasaCambio)
-                    dynEntity.TasaCambio = TasaCambio;
+                if (fieldsEntity.Telefono)
+                    dynEntity.Telefono = Telefono;
+                if (fieldsEntity.Saldo)
+                    dynEntity.Saldo = Saldo;
 
                 return JsonConvert.SerializeObject(dynEntity);
             }
@@ -236,13 +223,13 @@ namespace base2.Modelo
             }
         }
 
-        public static Moneda[] ToArray(string jentities)
+        public static Cliente[] ToArray(string jentities)
         {
             string[] strEntities = Entity.SplitJsonObjects(jentities);
-            List<Moneda> entities = new List<Moneda>();
+            List<Cliente> entities = new List<Cliente>();
             foreach (var sentity in strEntities)
             {
-                Moneda entity = new Moneda(sentity);
+                Cliente entity = new Cliente(sentity);
                 entities.Add(entity);
             }
 
@@ -250,3 +237,4 @@ namespace base2.Modelo
         }
     }
 }
+
