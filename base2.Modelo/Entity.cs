@@ -70,17 +70,17 @@ namespace base2.Modelo
         public abstract string ToJsonXnoid(string jfields = null);
 
         /// <summary>
-        /// ToArrayOfJsonEntities.
+        /// SplitJsonObjects.
         /// </summary>
-        /// <returns>Array de strings (formato Json) con un elemento por cada entidad 
-        ///             de la colección de entidades en jentities (formato Json).</returns>
-        /// <param name="jentities">Array o colección de entidades en formato Json.</param>
-        public static string[] ToArrayOfJsonEntities(string jentities)
+        /// <returns>Array de strings (formato Json) con un elemento por cada Objeto 
+        ///             de la colección de objetos en jobjects (formato Json).</returns>
+        /// <param name="jobjects">Array o colección de objects en formato Json.</param>
+        public static string[] SplitJsonObjects(string jobjects)
         {
-            List<string> strEntities = new List<string>();
-            StringReader sr = new StringReader(jentities);
+            List<string> strObjects = new List<string>();
+            StringReader sr = new StringReader(jobjects);
             JsonTextReader jReader = new JsonTextReader(sr);
-            string jentity = string.Empty;
+            string jobject = string.Empty;
             int indexStart = -1;
             int indexEnd = -1;
             while(jReader.Read())
@@ -92,17 +92,17 @@ namespace base2.Modelo
                 else if (jReader.TokenType == JsonToken.EndObject)
                 {
                     indexEnd = jReader.LinePosition;
-                    jentity = jentities.Substring(indexStart, indexEnd - indexStart);
-                    strEntities.Add(jentity);
+                    jobject = jobjects.Substring(indexStart, indexEnd - indexStart);
+                    strObjects.Add(jobject);
                     indexStart = -1;
                     indexEnd = -1;
-                    jentity = string.Empty;
+                    jobject = string.Empty;
                 }
             }
             jReader.Close();
             sr.Close();
 
-            return strEntities.ToArray();
+            return strObjects.ToArray();
         }
 
         /// <summary>

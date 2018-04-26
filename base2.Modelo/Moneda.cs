@@ -238,7 +238,7 @@ namespace base2.Modelo
 
         public static Moneda[] ToArray(string jentities)
         {
-            string[] strEntities = Entity.ToArrayOfJsonEntities(jentities);
+            string[] strEntities = Entity.SplitJsonObjects(jentities);
             List<Moneda> monedas = new List<Moneda>();
             foreach (var se in strEntities)
             {
